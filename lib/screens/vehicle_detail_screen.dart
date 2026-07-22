@@ -12,6 +12,7 @@ class VehicleDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weapons = vehicle.weapons.isEmpty ? 'No weapons mounted.' : vehicle.weapons.join('\r\n\r\n');
+    final accessories = vehicle.accessories.isEmpty ? 'No accessories.' : vehicle.accessories.join('\r\n');
     final acceleration = vehicle.isUnderpowered ? 'Underpowered – vehicle will not move' : '${vehicle.acceleration} mph';
     final driverDp = baseDriverDp + (vehicle.hasBodyArmor ? bodyArmorDpBonus : 0);
 
@@ -50,6 +51,7 @@ class VehicleDetailScreen extends StatelessWidget {
           ),
           _PlainRow('Targeting: ${vehicle.targetingComputer}', marginBottom: 16),
           _DetailRow(label: 'Weapons', value: weapons),
+          _DetailRow(label: 'Accessories', value: accessories),
           if (vehicle.notes.isNotEmpty) _DetailRow(label: 'Notes', value: vehicle.notes),
           _PlainRow('HC: ${vehicle.handlingClass}'),
           _PlainRow('Weight: ${vehicle.weight.toStringAsFixed(0)} lb'),

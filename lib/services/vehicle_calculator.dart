@@ -1,3 +1,4 @@
+import '../models/accessory.dart';
 import '../models/armor.dart';
 import '../models/body_type.dart';
 import '../models/chassis.dart';
@@ -67,6 +68,7 @@ VehicleStats computeVehicleStats({
   required List<MountedWeapon> mountedWeapons,
   bool hasBodyArmor = false,
   TargetingComputer targetingComputer = noTargetingComputer,
+  List<Accessory> accessories = const [],
 }) {
   final maxLoad = body.maxLoad * (1 + chassis.maxLoadModifier);
 
@@ -107,6 +109,10 @@ VehicleStats computeVehicleStats({
   final bodyArmorCostApplied = hasBodyArmor ? bodyArmorCost : 0;
   final driverDp = baseDriverDp + (hasBodyArmor ? bodyArmorDpBonus : 0);
 
+  final accessoriesCost = accessories.fold<int>(0, (sum, a) => sum + a.cost);
+  final accessoriesWeight = accessories.fold<double>(0, (sum, a) => sum + a.weight);
+  final accessoriesSpace = accessories.fold<double>(0, (sum, a) => sum + a.space);
+
   final totalCost = bodyPrice +
       suspensionCost +
       powerPlantCost +
@@ -115,7 +121,8 @@ VehicleStats computeVehicleStats({
       weaponsCost +
       ammoCost +
       bodyArmorCostApplied +
-      targetingComputer.cost;
+      targetingComputer.cost +
+      accessoriesCost;
 
   final totalWeight = body.weight +
       powerPlantWeight +
@@ -124,9 +131,14 @@ VehicleStats computeVehicleStats({
       weaponsWeight +
       ammoWeight +
       driverWeight +
-      targetingComputer.weight;
+      targetingComputer.weight +
+      accessoriesWeight;
 
-  final spacesUsed = powerPlantSpacesUsed + weaponsSpace + driverSpaces + targetingComputer.space;
+  final spacesUsed = powerPlantSpacesUsed +
+      weaponsSpace +
+      driverSpaces +
+      targetingComputer.space +
+      accessoriesSpace;
   final spacesAvailable = body.spaces - spacesUsed;
 
   final handlingClass = suspension.handlingClassFor(body.handlingCategory);

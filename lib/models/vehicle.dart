@@ -16,6 +16,7 @@ class Vehicle {
     this.weapons = const [],
     this.hasBodyArmor = false,
     this.targetingComputer = 'None',
+    this.accessories = const [],
     this.totalCost = 0,
     this.weight = 0,
     this.handlingClass = 0,
@@ -40,6 +41,7 @@ class Vehicle {
   final List<String> weapons;
   final bool hasBodyArmor;
   final String targetingComputer;
+  final List<String> accessories;
   final double totalCost;
   final double weight;
   final int handlingClass;

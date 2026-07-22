@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../models/accessory.dart';
 import '../models/armor.dart';
 import '../models/body_type.dart';
 import '../models/chassis.dart';
@@ -43,6 +44,9 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
   bool _hasBodyArmor = false;
   TargetingComputer _targetingComputer = noTargetingComputer;
 
+  final List<Accessory> _accessories = [];
+  Accessory _accessoryToAdd = accessories.first;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -66,6 +70,7 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
         mountedWeapons: _mountedWeapons,
         hasBodyArmor: _hasBodyArmor,
         targetingComputer: _targetingComputer,
+        accessories: _accessories,
       );
 
   @override
@@ -236,6 +241,38 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
             ),
           ),
           const SizedBox(height: 24),
+          _SectionHeader('Accessories'),
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<Accessory>(
+                  initialValue: _accessoryToAdd,
+                  isExpanded: true,
+                  decoration: const InputDecoration(labelText: 'Accessory', border: OutlineInputBorder()),
+                  items: accessories
+                      .map((a) => DropdownMenuItem(value: a, child: Text('${a.name} (\$${a.cost})')))
+                      .toList(),
+                  onChanged: (value) => setState(() => _accessoryToAdd = value!),
+                ),
+              ),
+              const SizedBox(width: 8),
+              FilledButton(
+                onPressed: () => setState(() => _accessories.add(_accessoryToAdd)),
+                child: const Text('Add'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (_accessories.isEmpty)
+            const Text('No accessories added.', style: TextStyle(color: Colors.grey))
+          else
+            ..._accessories.asMap().entries.map(
+                  (entry) => _AccessoryRow(
+                    accessory: entry.value,
+                    onRemove: () => setState(() => _accessories.removeAt(entry.key)),
+                  ),
+                ),
+          const SizedBox(height: 24),
           _SummaryCard(stats: stats),
           const SizedBox(height: 24),
           Row(
@@ -295,6 +332,7 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
       weapons: weaponLines,
       hasBodyArmor: _hasBodyArmor,
       targetingComputer: _targetingComputer.name,
+      accessories: _accessories.map((a) => a.name).toList(),
       totalCost: stats.totalCost,
       weight: stats.totalWeight,
       handlingClass: stats.handlingClass,
@@ -380,6 +418,48 @@ class _MountedWeaponRow extends StatelessWidget {
                         Text('\$${mounted.ammoCost.toStringAsFixed(0)}'),
                       ],
                     ),
+                  ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            onPressed: onRemove,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AccessoryRow extends StatelessWidget {
+  const _AccessoryRow({required this.accessory, required this.onRemove});
+
+  final Accessory accessory;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    final specs = <String>[
+      '\$${accessory.cost}',
+      if (accessory.weight > 0) '${accessory.weight.toStringAsFixed(0)} lb',
+      if (accessory.space > 0) '${_formatSpace(accessory.space)} sp',
+    ].join(' | ');
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(accessory.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(specs, style: const TextStyle(color: Colors.grey)),
+                if (accessory.description.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(accessory.description, style: const TextStyle(color: Colors.grey, fontSize: 12)),
                   ),
               ],
             ),
