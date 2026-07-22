@@ -8,4 +8,6 @@ class MountedWeapon {
   int ammoRounds;
 
   double get ammoCost => ammoRounds * weapon.costPerShot;
+
+  double get ammoWeight => ammoRounds * weapon.weightPerShot;
 }

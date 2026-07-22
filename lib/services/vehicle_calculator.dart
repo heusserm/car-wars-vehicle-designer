@@ -90,7 +90,8 @@ VehicleStats computeVehicleStats({
 
   final weaponsCost = mountedWeapons.fold<int>(0, (sum, mw) => sum + mw.weapon.cost);
   final ammoCost = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoCost);
-  final weaponsWeight = mountedWeapons.fold<int>(0, (sum, mw) => sum + mw.weapon.weight);
+  final weaponsWeight = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.weapon.weight);
+  final ammoWeight = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoWeight);
   final weaponsSpace = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.weapon.space);
 
   final totalCost = bodyPrice +
@@ -106,6 +107,7 @@ VehicleStats computeVehicleStats({
       tiresWeight +
       armorWeight +
       weaponsWeight +
+      ammoWeight +
       driverWeight;
 
   final spacesUsed = powerPlantSpacesUsed + weaponsSpace + driverSpaces;
