@@ -4,12 +4,18 @@ import '../models/chassis.dart';
 import '../models/mounted_weapon.dart';
 import '../models/power_plant.dart';
 import '../models/suspension.dart';
+import '../models/targeting_computer.dart';
 import '../models/tire.dart';
 
 const int driverWeight = 150;
 const int driverSpaces = 2;
-const int driverDp = 3;
+const int baseDriverDp = 3;
 const int tireCount = 4;
+
+/// Woven plastic-cord body armor: $250, takes 3 hits before it is useless,
+/// effectively doubling the wearer's DP from 3 to 6.
+const int bodyArmorCost = 250;
+const int bodyArmorDpBonus = 3;
 
 class VehicleStats {
   const VehicleStats({
@@ -26,6 +32,7 @@ class VehicleStats {
     required this.isUnderpowered,
     required this.driverWeight,
     required this.driverSpaces,
+    required this.driverDp,
   });
 
   final double totalCost;
@@ -41,6 +48,7 @@ class VehicleStats {
   final bool isUnderpowered;
   final int driverWeight;
   final int driverSpaces;
+  final int driverDp;
 
   double get weightAvailable => maxLoad - totalWeight;
 }
@@ -57,6 +65,8 @@ VehicleStats computeVehicleStats({
   required TireType tire,
   required VehicleArmor armor,
   required List<MountedWeapon> mountedWeapons,
+  bool hasBodyArmor = false,
+  TargetingComputer targetingComputer = noTargetingComputer,
 }) {
   final maxLoad = body.maxLoad * (1 + chassis.maxLoadModifier);
 
@@ -94,13 +104,18 @@ VehicleStats computeVehicleStats({
   final ammoWeight = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoWeight);
   final weaponsSpace = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.weapon.space);
 
+  final bodyArmorCostApplied = hasBodyArmor ? bodyArmorCost : 0;
+  final driverDp = baseDriverDp + (hasBodyArmor ? bodyArmorDpBonus : 0);
+
   final totalCost = bodyPrice +
       suspensionCost +
       powerPlantCost +
       tiresCost +
       armorCost +
       weaponsCost +
-      ammoCost;
+      ammoCost +
+      bodyArmorCostApplied +
+      targetingComputer.cost;
 
   final totalWeight = body.weight +
       powerPlantWeight +
@@ -108,9 +123,10 @@ VehicleStats computeVehicleStats({
       armorWeight +
       weaponsWeight +
       ammoWeight +
-      driverWeight;
+      driverWeight +
+      targetingComputer.weight;
 
-  final spacesUsed = powerPlantSpacesUsed + weaponsSpace + driverSpaces;
+  final spacesUsed = powerPlantSpacesUsed + weaponsSpace + driverSpaces + targetingComputer.space;
   final spacesAvailable = body.spaces - spacesUsed;
 
   final handlingClass = suspension.handlingClassFor(body.handlingCategory);
@@ -147,5 +163,6 @@ VehicleStats computeVehicleStats({
     isUnderpowered: isUnderpowered,
     driverWeight: driverWeight,
     driverSpaces: driverSpaces,
+    driverDp: driverDp,
   );
 }

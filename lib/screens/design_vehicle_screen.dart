@@ -8,6 +8,7 @@ import '../models/chassis.dart';
 import '../models/mounted_weapon.dart';
 import '../models/power_plant.dart';
 import '../models/suspension.dart';
+import '../models/targeting_computer.dart';
 import '../models/tire.dart';
 import '../models/vehicle.dart';
 import '../models/vehicle_garage.dart';
@@ -39,6 +40,9 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
   final List<MountedWeapon> _mountedWeapons = [];
   Weapon _weaponToAdd = weapons.first;
 
+  bool _hasBodyArmor = false;
+  TargetingComputer _targetingComputer = noTargetingComputer;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -60,6 +64,8 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
         tire: _tireType,
         armor: _armor,
         mountedWeapons: _mountedWeapons,
+        hasBodyArmor: _hasBodyArmor,
+        targetingComputer: _targetingComputer,
       );
 
   @override
@@ -198,6 +204,38 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
                   ),
                 ),
           const SizedBox(height: 24),
+          _SectionHeader('Driver & Electronics'),
+          CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            title: const Text('Body Armor'),
+            subtitle: const Text('\$250 — doubles driver DP from 3 to 6'),
+            value: _hasBodyArmor,
+            onChanged: (value) => setState(() => _hasBodyArmor = value ?? false),
+          ),
+          const SizedBox(height: 8),
+          const Text('Targeting Computer', style: TextStyle(color: Colors.grey)),
+          RadioGroup<TargetingComputer>(
+            groupValue: _targetingComputer,
+            onChanged: (value) => setState(() => _targetingComputer = value!),
+            child: Column(
+              children: targetingComputers
+                  .map(
+                    (option) => RadioListTile<TargetingComputer>(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(option.name),
+                      subtitle: option.cost == 0
+                          ? null
+                          : Text('\$${option.cost}'
+                              '${option.space > 0 ? ', ${_formatSpace(option.space)} sp' : ''}'
+                              '${option.weight > 0 ? ', ${option.weight.toStringAsFixed(0)} lb' : ''}'),
+                      value: option,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          const SizedBox(height: 24),
           _SummaryCard(stats: stats),
           const SizedBox(height: 24),
           Row(
@@ -255,6 +293,8 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
       armorUnderbody: _armor.underbody,
       tireDp: _tireType.dp,
       weapons: weaponLines,
+      hasBodyArmor: _hasBodyArmor,
+      targetingComputer: _targetingComputer.name,
       totalCost: stats.totalCost,
       weight: stats.totalWeight,
       handlingClass: stats.handlingClass,
@@ -451,7 +491,7 @@ class _SummaryCard extends StatelessWidget {
             const SizedBox(height: 12),
             _statRow('Total Cost', '\$${stats.totalCost.toStringAsFixed(0)}'
                 ' (includes \$${stats.ammoCost.toStringAsFixed(0)} of ammo)'),
-            _statRow('Driver', '${stats.driverWeight} lb, ${stats.driverSpaces} sp (included above)'),
+            _statRow('Driver', '${stats.driverWeight} lb, ${stats.driverSpaces} sp, ${stats.driverDp} DP (included above)'),
             _statRow(
               'Spaces Used / Available',
               '${stats.spacesUsed.toStringAsFixed(1)} used, ${stats.spacesAvailable.toStringAsFixed(1)} available',
