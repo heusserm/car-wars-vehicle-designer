@@ -18,6 +18,12 @@ const int tireCount = 4;
 const int bodyArmorCost = 250;
 const int bodyArmorDpBonus = 3;
 
+/// Each magazine of ammo beyond the first (the base load that comes with the
+/// weapon) costs $50, weighs 15 lb, and takes 1 space, on top of the rounds.
+const int extraMagazineCost = 50;
+const int extraMagazineWeight = 15;
+const int extraMagazineSpaces = 1;
+
 class VehicleStats {
   const VehicleStats({
     required this.totalCost,
@@ -101,10 +107,20 @@ VehicleStats computeVehicleStats({
   final armorWeight = armor.totalPoints * body.armorWeightPerPoint;
 
   final weaponsCost = mountedWeapons.fold<int>(0, (sum, mw) => sum + mw.weapon.cost);
-  final ammoCost = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoCost);
+  final roundsCost = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoCost);
   final weaponsWeight = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.weapon.weight);
-  final ammoWeight = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoWeight);
+  final roundsWeight = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.ammoWeight);
   final weaponsSpace = mountedWeapons.fold<double>(0, (sum, mw) => sum + mw.weapon.space);
+
+  // Extra magazines beyond each weapon's base load: $50, 15 lb, 1 space each.
+  final extraMagazines = mountedWeapons.fold<int>(0, (sum, mw) => sum + mw.extraMagazines);
+  final magazineCost = extraMagazines * extraMagazineCost;
+  final magazineWeight = extraMagazines * extraMagazineWeight;
+  final magazineSpace = extraMagazines * extraMagazineSpaces;
+
+  // Displayed "ammo" figure bundles the rounds and the extra-magazine hardware.
+  final ammoCost = roundsCost + magazineCost;
+  final ammoWeight = roundsWeight + magazineWeight;
 
   final bodyArmorCostApplied = hasBodyArmor ? bodyArmorCost : 0;
   final driverDp = baseDriverDp + (hasBodyArmor ? bodyArmorDpBonus : 0);
@@ -136,6 +152,7 @@ VehicleStats computeVehicleStats({
 
   final spacesUsed = powerPlantSpacesUsed +
       weaponsSpace +
+      magazineSpace +
       driverSpaces +
       targetingComputer.space +
       accessoriesSpace;

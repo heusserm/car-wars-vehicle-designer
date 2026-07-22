@@ -32,18 +32,19 @@ class Weapon {
   final double weightPerShot;
 }
 
-/// Core offensive weapons from the Weapon Charts (Small/Large-Bore Projectile,
-/// Rockets, Lasers, Flamethrowers). Dropped gases/liquids/solids and hand
-/// dischargers are left out of this pass.
+/// Weapons are grouped into four pickers: projectiles, rockets, streams
+/// (lasers + flamethrowers) and dropped weapons.
 ///
 /// ammoPerBox/costPerShot/weightPerShot are cross-checked against the Weapon
-/// Charts in the Car Wars Compendium (SJG30-7142), pages 50-51. Where a weapon
-/// has multiple ammo types (HEAT/APFSDS/HESH, standard/incendiary, etc.), the
-/// base/standard round is used. Grenade Launcher, Mine-Flinger, Micromissile
-/// Launcher, and Variable-Fire Rocket Pod are left out: their ammo rules
-/// (variable-cost loads, multi-shot pods) are more complex than this app models.
-const List<Weapon> weapons = [
-  // Small-Bore Projectile Weapons
+/// Charts in the Car Wars Compendium (SJG30-7142). Where a weapon has multiple
+/// ammo types (HEAT/APFSDS/HESH, standard/incendiary, etc.), the base/standard
+/// round is used. A handful of weapons with variable-cost loads or multi-shot
+/// pods (Grenade Launcher, Mine-Flinger, Micromissile Launcher, Variable-Fire
+/// Rocket Pod, Gas Streamer) are left out, as are bus/semitrailer-only items.
+
+/// Projectile weapons (small- and large-bore).
+const List<Weapon> projectileWeapons = [
+  // Small-Bore
   Weapon(name: 'Machine Gun', abbreviation: 'MG', toHit: '7', damage: '1d', dp: 3, cost: 1000, weight: 150, space: 1, ammoPerBox: 20, costPerShot: 25, weightPerShot: 2.5),
   Weapon(name: 'Vulcan MG', abbreviation: 'VMG', toHit: '6', damage: '2d', dp: 3, cost: 2000, weight: 350, space: 2, ammoPerBox: 20, costPerShot: 35, weightPerShot: 5),
   Weapon(name: 'Flechette Gun', abbreviation: 'FG', toHit: '6', damage: '1d+1', dp: 2, cost: 700, weight: 100, space: 1, ammoPerBox: 20, costPerShot: 10, weightPerShot: 2.5),
@@ -52,7 +53,7 @@ const List<Weapon> weapons = [
   Weapon(name: 'Recoilless Rifle', abbreviation: 'RR', toHit: '7', damage: '2d', dp: 4, cost: 1500, weight: 300, space: 2, ammoPerBox: 10, costPerShot: 35, weightPerShot: 5),
   Weapon(name: 'Autocannon', abbreviation: 'AC', toHit: '6', damage: '3d', dp: 4, cost: 6500, weight: 500, space: 3, ammoPerBox: 10, costPerShot: 75, weightPerShot: 10),
 
-  // Large-Bore Projectile Weapons
+  // Large-Bore
   Weapon(name: 'Bomb', abbreviation: 'B', toHit: '9', damage: '4d', dp: 2, cost: 100, weight: 100, space: 2),
   Weapon(name: 'Cluster Bomb', abbreviation: 'CB', toHit: '9', damage: '2d', dp: 2, cost: 200, weight: 150, space: 2),
   Weapon(name: 'Starshell Launcher', abbreviation: 'SL', toHit: '-', damage: '-', dp: 2, cost: 500, weight: 100, space: 1, ammoPerBox: 5, costPerShot: 50, weightPerShot: 5),
@@ -62,10 +63,12 @@ const List<Weapon> weapons = [
   Weapon(name: 'Paint Gun', abbreviation: 'PG', toHit: '7/5', damage: '-', dp: 3, cost: 1000, weight: 250, space: 3, ammoPerBox: 10, costPerShot: 25, weightPerShot: 5),
   Weapon(name: 'Blast Cannon', abbreviation: 'BC', toHit: '7', damage: '4d', dp: 5, cost: 4500, weight: 500, space: 4, ammoPerBox: 10, costPerShot: 100, weightPerShot: 10),
   Weapon(name: 'Tank Gun', abbreviation: 'TG', toHit: '7', damage: '8d', dp: 10, cost: 10000, weight: 1200, space: 10, ammoPerBox: 10, costPerShot: 100, weightPerShot: 20),
+];
 
-  // Rockets - most are single-shot rounds where the listed cost already prices
-  // one round, so no separate ammo purchase is modeled. Rocket Launcher is
-  // magazine-fed per the chart and does have purchasable ammo.
+/// Rockets - most are single-shot rounds where the listed cost already prices
+/// one round, so no separate ammo purchase is modeled. Rocket Launcher is
+/// magazine-fed per the chart and does have purchasable ammo.
+const List<Weapon> rocketWeapons = [
   Weapon(name: 'Mini Rocket', abbreviation: 'MNR', toHit: '9', damage: '1d-1', dp: 1, cost: 50, weight: 20, space: 1 / 3),
   Weapon(name: 'Light Rocket', abbreviation: 'LtR', toHit: '9', damage: '1d', dp: 1, cost: 75, weight: 25, space: 0.5),
   Weapon(name: 'Medium Rocket', abbreviation: 'MR', toHit: '9', damage: '2d', dp: 2, cost: 140, weight: 50, space: 1),
@@ -76,8 +79,12 @@ const List<Weapon> weapons = [
   Weapon(name: 'Wire-Guided Missile', abbreviation: 'WGM', toHit: '6', damage: '3d', dp: 1, cost: 2000, weight: 100, space: 1),
   Weapon(name: 'Six-Shooter', abbreviation: '-', toHit: '9', damage: '1d*', dp: 2, cost: 450, weight: 150, space: 2),
   Weapon(name: 'Rocket Launcher', abbreviation: 'RL', toHit: '8', damage: '2d', dp: 2, cost: 1000, weight: 200, space: 2, ammoPerBox: 10, costPerShot: 35, weightPerShot: 5),
+];
 
-  // Lasers - draw power from the plant, no purchasable ammo.
+/// Stream weapons - lasers (draw power from the plant, no purchasable ammo) and
+/// flamethrowers (magazine-fed).
+const List<Weapon> streamWeapons = [
+  // Lasers
   Weapon(name: 'Targeting Laser', abbreviation: 'TL', toHit: '6', damage: '-', dp: 1, cost: 1000, weight: 50, space: 0),
   Weapon(name: 'Light Laser', abbreviation: 'LL', toHit: '6', damage: '1d', dp: 2, cost: 3000, weight: 200, space: 1),
   Weapon(name: 'Medium Laser', abbreviation: 'ML', toHit: '6', damage: '2d', dp: 2, cost: 5500, weight: 350, space: 2),
@@ -91,4 +98,38 @@ const List<Weapon> weapons = [
   Weapon(name: 'Light Flamethrower', abbreviation: 'LFT', toHit: '6', damage: '1d-2', dp: 1, cost: 350, weight: 250, space: 1, ammoPerBox: 10, costPerShot: 15, weightPerShot: 3),
   Weapon(name: 'Flamethrower', abbreviation: 'FT', toHit: '6', damage: '1d', dp: 2, cost: 500, weight: 450, space: 2, ammoPerBox: 10, costPerShot: 25, weightPerShot: 5),
   Weapon(name: 'HD Flamethrower', abbreviation: 'HDFT', toHit: '6', damage: '2d', dp: 3, cost: 1250, weight: 650, space: 3, ammoPerBox: 10, costPerShot: 50, weightPerShot: 10),
+];
+
+/// Dropped weapons (clouds, slicks, spikes, mines). These are released behind or
+/// beneath the vehicle rather than aimed, so to-hit and damage are shown as '-'.
+/// Drop-plates are single-use with no reloadable ammo.
+const List<Weapon> droppedWeapons = [
+  Weapon(name: 'Smokescreen', abbreviation: 'SS', toHit: '-', damage: '-', dp: 4, cost: 250, weight: 25, space: 1, ammoPerBox: 10, costPerShot: 10, weightPerShot: 5),
+  Weapon(name: 'HD Smokescreen', abbreviation: 'HDSS', toHit: '-', damage: '-', dp: 4, cost: 500, weight: 50, space: 2, ammoPerBox: 10, costPerShot: 40, weightPerShot: 20),
+  Weapon(name: 'Paint Spray', abbreviation: 'PS', toHit: '-', damage: '-', dp: 2, cost: 400, weight: 25, space: 1, ammoPerBox: 25, costPerShot: 10, weightPerShot: 2),
+  Weapon(name: 'HD Paint Spray', abbreviation: 'HDPS', toHit: '-', damage: '-', dp: 3, cost: 800, weight: 50, space: 2, ammoPerBox: 10, costPerShot: 40, weightPerShot: 8),
+  Weapon(name: 'Flame Cloud Ejector', abbreviation: 'FCE', toHit: '-', damage: '-', dp: 2, cost: 500, weight: 50, space: 2, ammoPerBox: 10, costPerShot: 60, weightPerShot: 5),
+  Weapon(name: 'HD Flame Cloud Ejector', abbreviation: 'HDFCE', toHit: '-', damage: '-', dp: 2, cost: 1000, weight: 100, space: 3, ammoPerBox: 10, costPerShot: 240, weightPerShot: 20),
+  Weapon(name: 'Flame Cloud Gas Streamer', abbreviation: 'FCGS', toHit: '-', damage: '-', dp: 1, cost: 200, weight: 100, space: 2, ammoPerBox: 2, costPerShot: 300, weightPerShot: 25),
+  Weapon(name: 'Oil Jet', abbreviation: 'OJ', toHit: '-', damage: '-', dp: 3, cost: 250, weight: 25, space: 2, ammoPerBox: 25, costPerShot: 10, weightPerShot: 2),
+  Weapon(name: 'HD Oil Jet', abbreviation: 'HDOJ', toHit: '-', damage: '-', dp: 4, cost: 500, weight: 50, space: 3, ammoPerBox: 10, costPerShot: 40, weightPerShot: 8),
+  Weapon(name: 'Flaming Oil Jet', abbreviation: 'FOJ', toHit: '-', damage: '-', dp: 3, cost: 300, weight: 30, space: 2, ammoPerBox: 25, costPerShot: 35, weightPerShot: 2),
+  Weapon(name: 'Heavy Flaming Oil Jet', abbreviation: 'HFOJ', toHit: '-', damage: '-', dp: 4, cost: 550, weight: 60, space: 3, ammoPerBox: 10, costPerShot: 140, weightPerShot: 8),
+  Weapon(name: 'Ice Dropper', abbreviation: 'ID', toHit: '-', damage: '-', dp: 3, cost: 750, weight: 50, space: 2, ammoPerBox: 25, costPerShot: 20, weightPerShot: 2),
+  Weapon(name: 'HD Ice Dropper', abbreviation: 'HDID', toHit: '-', damage: '-', dp: 4, cost: 1000, weight: 100, space: 3, ammoPerBox: 10, costPerShot: 100, weightPerShot: 10),
+  Weapon(name: 'Chaff Dispenser', abbreviation: 'CD', toHit: '-', damage: '-', dp: 2, cost: 300, weight: 25, space: 1, ammoPerBox: 10, costPerShot: 10, weightPerShot: 2),
+  Weapon(name: 'HD Chaff Dispenser', abbreviation: 'HDCD', toHit: '-', damage: '-', dp: 2, cost: 600, weight: 50, space: 2, ammoPerBox: 10, costPerShot: 40, weightPerShot: 8),
+  Weapon(name: 'Junk Dropper', abbreviation: 'JD', toHit: '-', damage: '-', dp: 4, cost: 50, weight: 25, space: 1, ammoPerBox: 10, costPerShot: 0, weightPerShot: 10),
+  Weapon(name: 'Minedropper', abbreviation: 'MD', toHit: '-', damage: '2d', dp: 2, cost: 500, weight: 150, space: 2, ammoPerBox: 10, costPerShot: 50, weightPerShot: 5),
+  Weapon(name: 'Spear 1000 Minedropper', abbreviation: 'SMD', toHit: '-', damage: '2d', dp: 2, cost: 750, weight: 150, space: 2, ammoPerBox: 5, costPerShot: 100, weightPerShot: 10),
+  Weapon(name: 'Spikedropper', abbreviation: 'SD', toHit: '-', damage: '-', dp: 4, cost: 100, weight: 25, space: 1, ammoPerBox: 10, costPerShot: 20, weightPerShot: 5),
+  Weapon(name: 'Drop-Spike Plate', abbreviation: 'DSP', toHit: '-', damage: '-', dp: 4, cost: 200, weight: 50, space: 1),
+];
+
+/// All weapons across every category, in picker order.
+const List<Weapon> weapons = [
+  ...projectileWeapons,
+  ...rocketWeapons,
+  ...streamWeapons,
+  ...droppedWeapons,
 ];

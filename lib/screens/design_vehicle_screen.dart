@@ -39,7 +39,10 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
 
   final VehicleArmor _armor = VehicleArmor();
   final List<MountedWeapon> _mountedWeapons = [];
-  Weapon _weaponToAdd = weapons.first;
+  Weapon _projectileToAdd = projectileWeapons.first;
+  Weapon _rocketToAdd = rocketWeapons.first;
+  Weapon _streamToAdd = streamWeapons.first;
+  Weapon _droppedToAdd = droppedWeapons.first;
 
   bool _hasBodyArmor = false;
   TargetingComputer _targetingComputer = noTargetingComputer;
@@ -72,6 +75,37 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
         targetingComputer: _targetingComputer,
         accessories: _accessories,
       );
+
+  Widget _weaponPicker(
+    String label,
+    List<Weapon> options,
+    Weapon selected,
+    ValueChanged<Weapon> onSelect,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButtonFormField<Weapon>(
+              initialValue: selected,
+              isExpanded: true,
+              decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
+              items: options
+                  .map((w) => DropdownMenuItem(value: w, child: Text('${w.name} (${w.damage})')))
+                  .toList(),
+              onChanged: (value) => setState(() => onSelect(value!)),
+            ),
+          ),
+          const SizedBox(width: 8),
+          FilledButton(
+            onPressed: () => setState(() => _mountedWeapons.add(MountedWeapon(selected))),
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,26 +211,14 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
           _ArmorGrid(armor: _armor, onChanged: () => setState(() {})),
           const SizedBox(height: 24),
           _SectionHeader('Weapons'),
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField<Weapon>(
-                  initialValue: _weaponToAdd,
-                  isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'Weapon', border: OutlineInputBorder()),
-                  items: weapons
-                      .map((w) => DropdownMenuItem(value: w, child: Text('${w.name} (${w.damage})')))
-                      .toList(),
-                  onChanged: (value) => setState(() => _weaponToAdd = value!),
-                ),
-              ),
-              const SizedBox(width: 8),
-              FilledButton(
-                onPressed: () => setState(() => _mountedWeapons.add(MountedWeapon(_weaponToAdd))),
-                child: const Text('Add'),
-              ),
-            ],
-          ),
+          _weaponPicker('Projectiles', projectileWeapons, _projectileToAdd,
+              (w) => _projectileToAdd = w),
+          _weaponPicker('Rockets', rocketWeapons, _rocketToAdd,
+              (w) => _rocketToAdd = w),
+          _weaponPicker('Streams (laser / flamethrower)', streamWeapons, _streamToAdd,
+              (w) => _streamToAdd = w),
+          _weaponPicker('Dropped', droppedWeapons, _droppedToAdd,
+              (w) => _droppedToAdd = w),
           const SizedBox(height: 8),
           if (_mountedWeapons.isEmpty)
             const Text('No weapons mounted.', style: TextStyle(color: Colors.grey))
@@ -570,7 +592,7 @@ class _SummaryCard extends StatelessWidget {
             Text('Summary', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
             _statRow('Total Cost', '\$${stats.totalCost.toStringAsFixed(0)}'
-                ' (includes \$${stats.ammoCost.toStringAsFixed(0)} of ammo)'),
+                ' (includes \$${stats.ammoCost.toStringAsFixed(0)} of ammo & magazines)'),
             _statRow('Driver', '${stats.driverWeight} lb, ${stats.driverSpaces} sp, ${stats.driverDp} DP (included above)'),
             _statRow(
               'Spaces Used / Available',

@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                 icon: const Icon(Icons.add),
                 label: const Text('Design New Vehicle'),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 96),
               const _AttributionNotice(),
             ],
           ),
@@ -56,6 +56,7 @@ class _AttributionNotice extends StatelessWidget {
 
   static final Uri _policyUrl = Uri.parse('https://www.sjgames.com/general/online_policy.html');
   static final Uri _storeUrl = Uri.parse('https://warehouse23.com/collections/car-wars-classic');
+  static final Uri _emailUrl = Uri.parse('mailto:Matt@xndev.com');
 
   Future<void> _open(Uri url) async {
     await launchUrl(url, mode: LaunchMode.externalApplication);
@@ -69,32 +70,51 @@ class _AttributionNotice extends StatelessWidget {
       decoration: TextDecoration.underline,
     );
 
-    return Text.rich(
-      TextSpan(
-        style: baseStyle,
-        children: [
-          const TextSpan(
-            text: 'Car Wars Vehicle Designer is a free game aid for the Car Wars '
-                'Compendium and prior versions of the game, used with permission (',
-          ),
+    return Column(
+      children: [
+        Text.rich(
           TextSpan(
-            text: 'SJG Online Policy',
-            style: linkStyle,
-            recognizer: TapGestureRecognizer()..onTap = () => _open(_policyUrl),
+            style: baseStyle,
+            children: [
+              const TextSpan(
+                text: 'Car Wars Vehicle Designer is a free game aid for the Car Wars '
+                    'Compendium and prior versions of the game, used with permission (',
+              ),
+              TextSpan(
+                text: 'SJG Online Policy',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()..onTap = () => _open(_policyUrl),
+              ),
+              const TextSpan(
+                text: '). This app does not provide a standalone game. You can purchase '
+                    'the classic versions of the game that this aid supports at ',
+              ),
+              TextSpan(
+                text: 'Warehouse 23',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()..onTap = () => _open(_storeUrl),
+              ),
+              const TextSpan(text: '.'),
+            ],
           ),
-          const TextSpan(
-            text: '). This app does not provide a standalone game. You can purchase '
-                'the classic versions of the game that this aid supports at ',
-          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 16),
+        Text.rich(
           TextSpan(
-            text: 'Warehouse 23',
-            style: linkStyle,
-            recognizer: TapGestureRecognizer()..onTap = () => _open(_storeUrl),
+            style: baseStyle,
+            children: [
+              const TextSpan(text: 'Application designed and implemented by Matthew Heusser · '),
+              TextSpan(
+                text: 'Matt@xndev.com',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()..onTap = () => _open(_emailUrl),
+              ),
+            ],
           ),
-          const TextSpan(text: '.'),
-        ],
-      ),
-      textAlign: TextAlign.center,
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
