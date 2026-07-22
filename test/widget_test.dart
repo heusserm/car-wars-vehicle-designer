@@ -1,8 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:car_wars_vehicle_designer/main.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
   testWidgets('Home screen shows navigation entry points', (
     WidgetTester tester,
   ) async {
@@ -13,7 +19,7 @@ void main() {
     expect(find.text('Design New Vehicle'), findsOneWidget);
   });
 
-  testWidgets('Navigating to vehicle list shows placeholder vehicles', (
+  testWidgets('Navigating to vehicle list shows an empty garage', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const CarWarsVehicleDesignerApp());
@@ -22,6 +28,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('My Vehicles'), findsOneWidget);
-    expect(find.text('Bulldog Sedan'), findsOneWidget);
+    expect(find.byIcon(Icons.directions_car_filled), findsNothing);
   });
 }
