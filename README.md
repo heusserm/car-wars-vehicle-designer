@@ -2,9 +2,10 @@
 
 A cross-platform (Android + iOS) companion app for designing vehicles for
 **Car Wars** (Steve Jackson Games), built with Flutter. It walks through the
-vehicle construction rules from the *Car Wars Compendium* — body, chassis,
-suspension, power plant, tires, armor and weapons — and shows you live
-totals for cost, weight, available space and performance as you build.
+vehicle construction rules from the *Car Wars Compendium, 2nd Edition* and
+earlier editions — body, chassis, suspension, power plant, tires, armor and
+weapons — and shows you live totals for cost, weight, available space and
+performance as you build.
 
 ## Features
 
@@ -249,6 +250,11 @@ lib/
               top speed formulas)
   screens/    Home, vehicle list, vehicle detail, and the designer form
 ```
+
+## Development
+
+Built by Matt Heusser with assistance from [Claude Code](https://claude.com/claude-code)
+(Anthropic).
 
 ## License
 
