@@ -228,18 +228,11 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
       name = 'Unnamed Vehicle';
     }
 
-    final chassisSummary = '${_chassisType.name} ${_bodyType.name}';
     final powerPlantSummary = _isElectric ? _electricPlant.name : _gasEngine.name;
-
-    final notes = 'Cost \$${stats.totalCost.toStringAsFixed(0)} '
-        '(incl. \$${stats.ammoCost.toStringAsFixed(0)} ammo) | '
-        '${stats.totalWeight.toStringAsFixed(0)} lb | HC ${stats.handlingClass} | '
-        'Accel ${stats.isUnderpowered ? 'underpowered' : '${stats.acceleration} mph'} | '
-        'Top speed ${stats.topSpeed.toStringAsFixed(1)} mph | ${_mountedWeapons.length} weapon(s) mounted';
 
     final weaponLines = _mountedWeapons.map((mounted) {
       final weapon = mounted.weapon;
-      var line = '${weapon.name} (Dam ${weapon.damage}) — '
+      var line = '${weapon.name} ${weapon.damage} — '
           '\$${weapon.cost}, ${weapon.weight} lb, ${_formatSpace(weapon.space)} sp';
       if (weapon.ammoPerBox > 0) {
         line += ' — Ammo: ${mounted.ammoRounds} rounds (\$${mounted.ammoCost.toStringAsFixed(0)})';
@@ -250,9 +243,10 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
     await VehicleGarage.load();
     VehicleGarage.savedVehicles.add(Vehicle(
       name: name,
-      chassis: chassisSummary,
+      bodyType: _bodyType.name,
+      chassisType: _chassisType.name,
+      suspensionType: _suspensionType.name,
       powerPlant: powerPlantSummary,
-      notes: notes,
       armorFront: _armor.front,
       armorBack: _armor.back,
       armorLeft: _armor.left,
@@ -261,6 +255,12 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
       armorUnderbody: _armor.underbody,
       tireDp: _tireType.dp,
       weapons: weaponLines,
+      totalCost: stats.totalCost,
+      weight: stats.totalWeight,
+      handlingClass: stats.handlingClass,
+      acceleration: stats.acceleration,
+      isUnderpowered: stats.isUnderpowered,
+      topSpeed: stats.topSpeed,
     ));
     await VehicleGarage.persist();
 
@@ -480,14 +480,18 @@ class _SummaryCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isWarning ? Colors.red : null,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isWarning ? Colors.red : null,
+              ),
             ),
           ),
         ],

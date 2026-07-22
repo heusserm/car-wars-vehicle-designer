@@ -28,7 +28,9 @@ class VehicleGarage {
       final map = entry as Map<String, dynamic>;
       return Vehicle(
         name: map['name'] as String,
-        chassis: map['chassis'] as String,
+        bodyType: map['bodyType'] as String,
+        chassisType: map['chassisType'] as String,
+        suspensionType: map['suspensionType'] as String,
         powerPlant: map['powerPlant'] as String,
         notes: map['notes'] as String,
         armorFront: map['armorFront'] as int,
@@ -39,6 +41,12 @@ class VehicleGarage {
         armorUnderbody: map['armorUnderbody'] as int,
         tireDp: map['tireDp'] as int,
         weapons: (map['weapons'] as List<dynamic>).cast<String>(),
+        totalCost: (map['totalCost'] as num).toDouble(),
+        weight: (map['weight'] as num).toDouble(),
+        handlingClass: map['handlingClass'] as int,
+        acceleration: map['acceleration'] as int,
+        isUnderpowered: map['isUnderpowered'] as bool,
+        topSpeed: (map['topSpeed'] as num).toDouble(),
       );
     }));
   }
@@ -49,7 +57,9 @@ class VehicleGarage {
     final json = jsonEncode(savedVehicles
         .map((v) => {
               'name': v.name,
-              'chassis': v.chassis,
+              'bodyType': v.bodyType,
+              'chassisType': v.chassisType,
+              'suspensionType': v.suspensionType,
               'powerPlant': v.powerPlant,
               'notes': v.notes,
               'armorFront': v.armorFront,
@@ -60,6 +70,12 @@ class VehicleGarage {
               'armorUnderbody': v.armorUnderbody,
               'tireDp': v.tireDp,
               'weapons': v.weapons,
+              'totalCost': v.totalCost,
+              'weight': v.weight,
+              'handlingClass': v.handlingClass,
+              'acceleration': v.acceleration,
+              'isUnderpowered': v.isUnderpowered,
+              'topSpeed': v.topSpeed,
             })
         .toList());
     await prefs.setString(_prefsKey, json);

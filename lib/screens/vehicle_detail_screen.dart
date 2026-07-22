@@ -11,16 +11,8 @@ class VehicleDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final armor = 'Front: ${vehicle.armorFront} DP\r\n'
-        'Back: ${vehicle.armorBack} DP\r\n'
-        'Left: ${vehicle.armorLeft} DP\r\n'
-        'Right: ${vehicle.armorRight} DP\r\n'
-        'Top: ${vehicle.armorTop} DP\r\n'
-        'Underbody: ${vehicle.armorUnderbody} DP\r\n\r\n'
-        'Tires: ${vehicle.tireDp} DP each\r\n\r\n'
-        'Driver: $driverWeight lb, $driverDp DP';
-
     final weapons = vehicle.weapons.isEmpty ? 'No weapons mounted.' : vehicle.weapons.join('\r\n\r\n');
+    final acceleration = vehicle.isUnderpowered ? 'Underpowered – vehicle will not move' : '${vehicle.acceleration} mph';
 
     return Scaffold(
       appBar: AppBar(
@@ -38,12 +30,26 @@ class VehicleDetailScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _DetailRow(label: 'Chassis', value: vehicle.chassis),
+          _PlainRow('Body: ${vehicle.bodyType}'),
+          _PlainRow('Chassis: ${vehicle.chassisType}'),
+          _PlainRow('Suspension: ${vehicle.suspensionType}', marginBottom: 16),
           _DetailRow(label: 'Power Plant', value: vehicle.powerPlant),
-          _DetailRow(label: 'Armor', value: armor),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 4),
+            child: Text('Armor', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+          ),
+          _ArmorPairRow('Front: ${vehicle.armorFront} DP', 'Back: ${vehicle.armorBack} DP'),
+          _ArmorPairRow('Left: ${vehicle.armorLeft} DP', 'Right: ${vehicle.armorRight} DP'),
+          _ArmorPairRow('Top: ${vehicle.armorTop} DP', 'Under: ${vehicle.armorUnderbody} DP'),
+          _PlainRow('Tires: ${vehicle.tireDp} DP each', marginTop: 12),
+          _PlainRow('Driver: $driverWeight lb, $driverDp DP', marginTop: 12, marginBottom: 16),
           _DetailRow(label: 'Weapons', value: weapons),
-          if (vehicle.notes.isNotEmpty)
-            _DetailRow(label: 'Notes', value: vehicle.notes),
+          if (vehicle.notes.isNotEmpty) _DetailRow(label: 'Notes', value: vehicle.notes),
+          _PlainRow('HC: ${vehicle.handlingClass}'),
+          _PlainRow('Weight: ${vehicle.weight.toStringAsFixed(0)} lb'),
+          _PlainRow('Accel: $acceleration'),
+          _PlainRow('Top Speed: ${vehicle.topSpeed.toStringAsFixed(1)} mph'),
+          _PlainRow('Cost: \$${vehicle.totalCost.toStringAsFixed(0)}'),
         ],
       ),
     );
@@ -69,6 +75,42 @@ class _DetailRow extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(value, style: const TextStyle(fontSize: 16)),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlainRow extends StatelessWidget {
+  const _PlainRow(this.text, {this.marginTop = 2, this.marginBottom = 0});
+
+  final String text;
+  final double marginTop;
+  final double marginBottom;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: marginTop, bottom: marginBottom),
+      child: Text(text, style: const TextStyle(fontSize: 16)),
+    );
+  }
+}
+
+class _ArmorPairRow extends StatelessWidget {
+  const _ArmorPairRow(this.left, this.right);
+
+  final String left;
+  final String right;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: Row(
+        children: [
+          Expanded(child: Text(left, style: const TextStyle(fontSize: 16))),
+          Expanded(child: Text(right, style: const TextStyle(fontSize: 16))),
         ],
       ),
     );

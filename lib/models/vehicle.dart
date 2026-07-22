@@ -1,7 +1,9 @@
 class Vehicle {
   const Vehicle({
     required this.name,
-    required this.chassis,
+    required this.bodyType,
+    required this.chassisType,
+    required this.suspensionType,
     required this.powerPlant,
     this.notes = '',
     this.armorFront = 0,
@@ -12,10 +14,18 @@ class Vehicle {
     this.armorUnderbody = 0,
     this.tireDp = 0,
     this.weapons = const [],
+    this.totalCost = 0,
+    this.weight = 0,
+    this.handlingClass = 0,
+    this.acceleration = 0,
+    this.isUnderpowered = false,
+    this.topSpeed = 0,
   });
 
   final String name;
-  final String chassis;
+  final String bodyType;
+  final String chassisType;
+  final String suspensionType;
   final String powerPlant;
   final String notes;
   final int armorFront;
@@ -26,4 +36,10 @@ class Vehicle {
   final int armorUnderbody;
   final int tireDp;
   final List<String> weapons;
+  final double totalCost;
+  final double weight;
+  final int handlingClass;
+  final int acceleration;
+  final bool isUnderpowered;
+  final double topSpeed;
 }

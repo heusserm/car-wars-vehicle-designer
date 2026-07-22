@@ -38,7 +38,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
               return ListTile(
                 leading: const Icon(Icons.directions_car_filled),
                 title: Text(vehicle.name),
-                subtitle: Text(vehicle.chassis),
+                subtitle: Text('${vehicle.chassisType} ${vehicle.bodyType}'),
                 trailing: IconButton(
                   icon: const Icon(Icons.delete_outline),
                   onPressed: () => _confirmDelete(vehicle),
