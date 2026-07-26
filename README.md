@@ -260,7 +260,7 @@ Built by Matt Heusser with assistance from [Claude Code](https://claude.com/clau
 
 Copyright © 2026 Matt Heusser
 
-Released under the [MIT License](LICENSE).
+Released under the [PolyForm Noncommercial License 1.0.0](LICENSE): you may use, run, modify, and share this software for any noncommercial purpose, and contributions are welcome — but commercial use, including selling it, is not permitted.
 
 ## Fan Content Notice
 
