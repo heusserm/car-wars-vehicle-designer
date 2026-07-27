@@ -260,7 +260,11 @@ Built by Matt Heusser with assistance from [Claude Code](https://claude.com/clau
 
 Copyright © 2026 Matt Heusser
 
-Released under the [PolyForm Noncommercial License 1.0.0](LICENSE): you may use, run, modify, and share this software for any noncommercial purpose, and contributions are welcome — but commercial use, including selling it, is not permitted.
+**For everyone else** — released under the [PolyForm Noncommercial License 1.0.0](LICENSE): use, run, modify, and share it for any **noncommercial** purpose, and contributions are welcome. Commercial use, including selling it, is not permitted for third parties.
+
+**Author's commercial rights** — as the copyright holder, Matt Heusser retains all commercial rights and may sell or license this software (e.g., as a paid app). A license grants rights to others; it does not limit the owner.
+
+**Contributing** — by contributing you agree to the [Contributor License Agreement](CONTRIBUTING.md), which lets your contribution be shared publicly under PolyForm Noncommercial **and** included in the author's commercial versions.
 
 ## Fan Content Notice
 
