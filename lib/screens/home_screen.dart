@@ -77,17 +77,21 @@ class _AttributionNotice extends StatelessWidget {
             style: baseStyle,
             children: [
               const TextSpan(
-                text: 'Car Wars Vehicle Designer is a free game aid for the Car Wars '
-                    'Compendium and prior versions of the game, used with permission (',
+                text: 'This is an unofficial, free game aid for the Car Wars Compendium, '
+                    '2nd Edition and earlier editions of Car Wars, distributed free of '
+                    'charge in accordance with the ',
               ),
               TextSpan(
-                text: 'SJG Online Policy',
+                text: 'Steve Jackson Games online policy',
                 style: linkStyle,
                 recognizer: TapGestureRecognizer()..onTap = () => _open(_policyUrl),
               ),
               const TextSpan(
-                text: '). This app does not provide a standalone game. You can purchase '
-                    'the classic versions of the game that this aid supports at ',
+                text: ' for fan-created material. It is not produced, sponsored, endorsed '
+                    'by, or affiliated with Steve Jackson Games. Car Wars and Car Wars '
+                    'Compendium are trademarks of Steve Jackson Games Incorporated. This '
+                    'app does not provide a standalone game. You can purchase the classic '
+                    'versions of the game that this aid supports at ',
               ),
               TextSpan(
                 text: 'Warehouse 23',
