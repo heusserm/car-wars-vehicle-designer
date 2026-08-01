@@ -41,6 +41,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                 title: Text(vehicle.name),
                 subtitle: Text('${vehicle.chassisType} ${vehicle.bodyType}'),
                 trailing: IconButton(
+                  tooltip: 'Delete ${vehicle.name}',
                   icon: const Icon(Icons.delete_outline),
                   onPressed: () => _confirmDelete(vehicle),
                 ),

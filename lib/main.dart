@@ -21,8 +21,12 @@ class CarWarsVehicleDesignerApp extends StatelessWidget {
       builder: (context, child) {
         final mediaQuery = MediaQuery.of(context);
         return MediaQuery(
+          // Cap runaway text sizes so the dense stat rows still fit, but leave
+          // headroom above 1.0 so Dynamic Type actually does something. A cap
+          // below 1.0 would shrink text for everyone and ignore the user's
+          // accessibility setting entirely.
           data: mediaQuery.copyWith(
-            textScaler: mediaQuery.textScaler.clamp(maxScaleFactor: 0.85),
+            textScaler: mediaQuery.textScaler.clamp(maxScaleFactor: 1.3),
           ),
           child: child!,
         );

@@ -22,6 +22,7 @@ class VehicleDetailScreen extends StatelessWidget {
         title: Text(vehicle.name),
         actions: [
           IconButton(
+            tooltip: 'Delete ${vehicle.name}',
             icon: const Icon(Icons.delete_outline),
             onPressed: () async {
               final deleted = await confirmDeleteVehicle(context, vehicle);

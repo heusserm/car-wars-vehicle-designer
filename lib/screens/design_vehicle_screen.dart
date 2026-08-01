@@ -424,6 +424,7 @@ class _MountedWeaponRow extends StatelessWidget {
                       children: [
                         const Text('Ammo:'),
                         IconButton(
+                          tooltip: 'Remove ammo from ${weapon.name}',
                           icon: const Icon(Icons.remove_circle_outline),
                           onPressed: () {
                             mounted.ammoRounds = (mounted.ammoRounds - weapon.ammoPerBox).clamp(0, 1 << 30);
@@ -432,6 +433,7 @@ class _MountedWeaponRow extends StatelessWidget {
                         ),
                         Text('${mounted.ammoRounds} rounds'),
                         IconButton(
+                          tooltip: 'Add ammo to ${weapon.name}',
                           icon: const Icon(Icons.add_circle_outline),
                           onPressed: () {
                             mounted.ammoRounds += weapon.ammoPerBox;
@@ -446,6 +448,7 @@ class _MountedWeaponRow extends StatelessWidget {
             ),
           ),
           IconButton(
+            tooltip: 'Remove ${weapon.name}',
             icon: const Icon(Icons.delete_outline),
             onPressed: onRemove,
           ),
@@ -488,6 +491,7 @@ class _AccessoryRow extends StatelessWidget {
             ),
           ),
           IconButton(
+            tooltip: 'Remove ${accessory.name}',
             icon: const Icon(Icons.delete_outline),
             onPressed: onRemove,
           ),
@@ -542,6 +546,9 @@ class _ArmorGrid extends StatelessWidget {
         Row(
           children: [
             IconButton(
+              // All six facings render an identical +/- pair, so name the
+              // facing here or a screen reader announces six identical buttons.
+              tooltip: 'Decrease $label armor',
               icon: const Icon(Icons.remove_circle_outline),
               onPressed: () {
                 onSet((value - 1).clamp(0, 1 << 30));
@@ -549,19 +556,23 @@ class _ArmorGrid extends StatelessWidget {
               },
             ),
             Expanded(
-              child: TextFormField(
-                key: ValueKey('$label-$value'),
-                initialValue: value.toString(),
-                textAlign: TextAlign.center,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
-                onChanged: (text) {
-                  onSet(int.tryParse(text) ?? 0);
-                  onChanged();
-                },
+              child: Semantics(
+                label: '$label armor points',
+                child: TextFormField(
+                  key: ValueKey('$label-$value'),
+                  initialValue: value.toString(),
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+                  onChanged: (text) {
+                    onSet(int.tryParse(text) ?? 0);
+                    onChanged();
+                  },
+                ),
               ),
             ),
             IconButton(
+              tooltip: 'Increase $label armor',
               icon: const Icon(Icons.add_circle_outline),
               onPressed: () {
                 onSet(value + 1);
