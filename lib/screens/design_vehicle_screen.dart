@@ -15,6 +15,7 @@ import '../models/vehicle.dart';
 import '../models/vehicle_garage.dart';
 import '../models/weapon.dart';
 import '../services/vehicle_calculator.dart';
+import '../widgets/max_width.dart';
 
 class DesignVehicleScreen extends StatefulWidget {
   const DesignVehicleScreen({super.key});
@@ -112,7 +113,7 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
     final stats = _stats;
     return Scaffold(
       appBar: AppBar(title: const Text('Design New Vehicle')),
-      body: ListView(
+      body: MaxWidth(child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           TextField(
@@ -315,7 +316,7 @@ class _DesignVehicleScreenState extends State<DesignVehicleScreen> {
             ],
           ),
         ],
-      ),
+      )),
     );
   }
 

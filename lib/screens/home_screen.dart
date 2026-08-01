@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'design_vehicle_screen.dart';
 import 'vehicle_list_screen.dart';
+import '../widgets/max_width.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Car Wars Vehicle Designer')),
-      body: Center(
+      body: MaxWidth(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/vehicle.dart';
 import '../services/vehicle_calculator.dart';
 import '../widgets/vehicle_delete_dialog.dart';
+import '../widgets/max_width.dart';
 
 class VehicleDetailScreen extends StatelessWidget {
   const VehicleDetailScreen({super.key, required this.vehicle});
@@ -29,7 +30,7 @@ class VehicleDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
+      body: MaxWidth(child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           _PlainRow('Body: ${vehicle.bodyType}'),
@@ -59,7 +60,7 @@ class VehicleDetailScreen extends StatelessWidget {
           _PlainRow('Top Speed: ${vehicle.topSpeed.toStringAsFixed(1)} mph'),
           _PlainRow('Cost: \$${vehicle.totalCost.toStringAsFixed(0)}'),
         ],
-      ),
+      )),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/vehicle.dart';
 import '../models/vehicle_garage.dart';
 import '../widgets/vehicle_delete_dialog.dart';
+import '../widgets/max_width.dart';
 import 'vehicle_detail_screen.dart';
 
 class VehicleListScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('My Vehicles')),
-      body: FutureBuilder<void>(
+      body: MaxWidth(child: FutureBuilder<void>(
         future: _loadFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
@@ -55,7 +56,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
             },
           );
         },
-      ),
+      )),
     );
   }
 }
